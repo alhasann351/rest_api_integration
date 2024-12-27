@@ -45,7 +45,10 @@ class _GetApiState extends State<GetApi> {
         future: fetchMovies(),
         builder: (context, AsyncSnapshot<List<Movies>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+                child: CircularProgressIndicator(
+              color: Colors.pink,
+            ));
           } else if (snapshot.hasError) {
             return Center(child: Text("Error: ${snapshot.error}"));
           } else {

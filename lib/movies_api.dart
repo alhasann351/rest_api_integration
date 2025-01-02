@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:http/http.dart' as http;
+import 'package:shimmer/shimmer.dart';
 
 import 'model/get_api_model.dart';
 
@@ -70,52 +71,28 @@ class _MoviesApiState extends State<MoviesApi> {
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
                   return Card(
-                    color: Colors.white,
-                    clipBehavior: Clip.antiAlias,
-                    elevation: 5,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        CachedNetworkImage(
-                          imageUrl: snapshot.data![index].posterPath.toString(),
-                        ),
-                        Text(
-                          snapshot.data![index].title.toString(),
-                        ),
-                        Text(
-                          snapshot.data![index].releaseDate.toString(),
-                        ),
-                      ],
-                    ),
-                  );
+                      color: Colors.white,
+                      clipBehavior: Clip.antiAlias,
+                      elevation: 5,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          CachedNetworkImage(
+                            imageUrl:
+                                snapshot.data![index].posterPath.toString(),
+                            placeholder: (context, url) => Shimmer.fromColors(
+                              baseColor: Colors.grey[300]!,
+                              highlightColor: Colors.grey[100]!,
+                              child: Container(
+                                color: Colors.grey,
+                              ),
+                            ),
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.error),
+                          ),
+                        ],
+                      ));
                 });
-            /*return GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3, // Number of columns
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                childAspectRatio: 0.7,
-              ),
-              padding: EdgeInsets.all(10),
-              itemCount: snapshot.data!.length,
-              itemBuilder: (context, index) {
-                return Container(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Image.network(
-                        snapshot.data![index].posterPath.toString(),
-                        fit: BoxFit.cover,
-                        height: 100,
-                      ),
-                      Text(
-                        snapshot.data![index].title.toString(),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            );*/
           }
         },
       ),
